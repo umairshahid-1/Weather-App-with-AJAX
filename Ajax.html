@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Application</title>
+</head>
+
+<body>
+    <h1>Weather Application</h1>
+
+    <label for="city">Enter City Name:</label>
+    <input type="text" id="city" placeholder="Enter city name">
+    <button id="fetchWeather">Get Weather</button>
+
+    <div id="weather-data"></div>
+
+    <script>
+        document.getElementById('fetchWeather').addEventListener('click', function () {
+            var city = document.getElementById('city').value;
+            var apiKey = '5e9df1531ec94d829d5103712240502'; // API key
+            var apiUrl = 'https://api.weatherapi.com/v1/current.json?key=' + apiKey + '&q=' + city;
+
+            fetch(apiUrl)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch weather data');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    var weatherData = data.current;
+                    var weatherOutput = `
+            <h2>Weather in ${city}</h2>
+            <p><strong>Condition:</strong> ${weatherData.condition.text}</p>
+            <p><strong>Temperature:</strong> ${weatherData.temp_c}°C</p>`;
+                    document.getElementById('weather-data').innerHTML = weatherOutput;
+                })
+                .catch(error => {
+                    document.getElementById('weather-data').innerHTML = '<p>Failed to fetch weather data. Please try again later.</p>';
+                });
+        });
+    </script>
+</body>
+
+</html>
